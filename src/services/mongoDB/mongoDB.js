@@ -85,13 +85,13 @@ async function getUserList() {
     return await userInfo.find({}, {projection: {email_addr: 0,_id: 0}}).toArray();
 }
 //gets all user profile info
-async function getProfile(user_id=null, username=null) {
+async function getProfile(user_id=undefined, username=undefined) {
     try {
         var totalScore = 0;
         let userDoc;
 
-        let id = user_id != null? 1 : 0;
-        let usr = username != null? 1 : 0;
+        let id = user_id != undefined? 1 : 0;
+        let usr = username != undefined? 1 : 0;
 
         let input = id > usr? 'user_id' : 'username';
         let inputData = id > usr? user_id : username;
@@ -121,7 +121,7 @@ async function getProfile(user_id=null, username=null) {
         
 }
 //creates new user
-async function createNewUser(username, email_addr, games_id_list) {
+async function createNewUser(username, email_addr, game_id_list) {
     try {
         const user_id = v4();
         email_addr = email_addr.toLowerCase();
@@ -139,7 +139,7 @@ async function createNewUser(username, email_addr, games_id_list) {
                 });
 
                 //inserts new games to user relationships
-                await addGamesToUser(user_id, games_id_list);
+                await addGamesToUser(user_id, game_id_list);
                 console.log('games inserted to profile');
                 }
             else {
