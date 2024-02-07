@@ -16,7 +16,7 @@ const createUser = (req, res) => {
         });
 }
 
-const removeUserList = (req, res) => {
+const deleteProfiles = (req, res) => {
     const data = req.body;
     let user_id_list = data['user_id'];
     mongo.removeUsers(user_id_list)
@@ -112,18 +112,27 @@ const addGameToCatalog = (req, res) => {
         });
 }
 
-const getMainPage = (req, res) => {
-    res.sendFile(__dirname, 'src\\public\\scripts\\frontPage.jsx');
-}
+const removeCatalogGames = (req, res) => {
+    const data = req.body;
+    let game_id_list = data['game_id_list'];
+    mongo.removeGames(game_id_list)
+    .then(msg => {
+        res.send('Games Removed From Catalog Successfully');
+    })
+    .catch(error => {
+        console.error('Remove Games From Catalog Error:', error);
+        res.status(500).send('Internal Server Error');
+    });
+} 
 
 module.exports = {
     addUserGames,
     removeUserGames,
     addGameToCatalog,
-    GameList,
-    userList,
+    removeCatalogGames,
     createUser,
-    removeUserList,
+    deleteProfiles,
     userProfile,
-    getMainPage
+    GameList,
+    userList
 }

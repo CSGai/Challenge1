@@ -2,15 +2,32 @@ const { routerSetup } = require('../utils/setup.js');
 
 setup = routerSetup();
 
-controller = setup['controller'];
+controllers = setup['apiControllers'];
 router = setup['router'];
 
+/*  
+    addUserGames,
+    removeUserGames,
+    addGameToCatalog,
+    removeCatalogGames,
+    createUser,
+    deleteProfiles,
+    userProfile,
+    GameList,
+    userList
+*/
+
 //POST methods
-router.post('/createNewUser', controller.createNewUser);
-router.post('/UserInfo', controller.getUserInfo);
+router.post('/createNewUser', controllers.createUser);
+router.post('/addUserGames', controllers.addUserGames);
+router.post('/userInfo', controllers.userProfile);
+router.post('/addGameToCatalog', controllers.addGameToCatalog);
 //DELETE methods
-router.delete('/removeUser', controller.removeUser);
+router.delete('/removeUser', controllers.deleteProfiles);
+router.delete('/removeGameFromUser', controllers.removeUserGames);
+router.delete('/removeCatalogGames', controllers.removeCatalogGames);
 //GET methods
-router.get('/userList', controller.getUserList);
+router.get('/userList', controllers.userList);
+router.get('/gameList', controllers.gameList);
 
 module.exports = router;

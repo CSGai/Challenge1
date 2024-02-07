@@ -2,9 +2,9 @@ const { routerSetup } = require('../utils/setup.js');
 
 setup = routerSetup();
 
-controller = setup['controller'];
+controllers = setup['directoryControllers'];
 router = setup['router'];
 
-router.get('/', controller.getMainPage);
+router.get('/', controllers.getMainPage);
 
 module.exports = router;

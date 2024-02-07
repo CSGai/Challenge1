@@ -284,5 +284,6 @@ module.exports = {
     getProfile, 
     createNewUser, 
     introduceGameToCatalog,
-    getGamesFromCatalog
+    getGamesFromCatalog,
+    removeGames
 }

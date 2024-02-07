@@ -17,7 +17,6 @@ backend.use('/', directories);
 backend.listen(port, (error) =>{
     if(!error && port != undefined){
         console.log("Server is Up and Running on Port " + port);
-        testDB();
     }
     else{
         console.log("Error occured during startup...", error);

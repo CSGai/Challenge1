@@ -1,15 +1,16 @@
 function routerSetup(){
-    const controller = require('../controllers/webControllers');
+    const apiControllers = require('../controllers/apiControllers');
+    const directoryControllers = require('../controllers/directoryControllers');
     const { Router } = require('express');
     const router = Router();
 
-    return {'controller': controller, 'router': router}
+    return {'apiControllers': apiControllers, 'directoryControllers': directoryControllers,  'router': router}
 }
 function backendSetup(){
     
     const express = require('express');
     const apiRoutes = require('../routes/apiRoutes');
-    const webRoutes = require('../routes/mainPage');
+    const webRoutes = require('../routes/webServerRoutes');
 
     const backend = express();
 
