@@ -18,20 +18,46 @@ const databaseCollections = {clientt:client,
                             userGameInfoo:userGameInfo}
 
 
-function execCommand(script, complete_msg=null) {
-      console.log(`executing batch: ${script}`);
-      //executes promise (script in this case)
-      const process = exec(`cmd /c ${script}`, (error, stdout, stderr) => {
-        if (error) {
-            console.error(`Error executing the batch script: ${error}`);
-        }
+// function execCommand(script, complete_msg=null) {
+//       console.log(`executing batch: ${script}`);
+//       //executes promise (script in this case)
+//       const process = exec(`cmd /c ${script}`, (error, stdout, stderr) => {
+//         if (error) {
+//             console.error(`Error executing the batch script: ${error}`);
+//         }
+//       });
+//       //hadnles exit codes
+//       process.on('exit', (code, signal) => {
+//         console.log(`Child process exited with code ${code} and signal ${signal}`);
+//     });
+//     if (complete_msg != null) {console.log(complete_msg);}
+// }
 
-        if (complete_msg != null) {console.log(complete_msg);}
-      });
-      //hadnles exit codes
-      process.on('exit', (code, signal) => {
-        console.log(`Child process exited with code ${code} and signal ${signal}`);
-    });
+async function execCommand(script, complete_msg = null) {
+    console.log(`executing batch: ${script}`);
+    try {
+        const result = await new Promise((resolve, reject) => {
+            const process = exec(`cmd /c ${script}`, (error, stdout, stderr) => {
+                if (error) {
+                    console.error(`Error executing the batch script: ${error}`);
+                    reject(error);
+                }
+                else {
+                    resolve(stdout);
+                }
+            });
+            process.on('exit', (code, signal) => {
+                console.log(`Child process exited with code ${code} and signal ${signal}`);
+            });
+        });
+        if (complete_msg !== null) {
+            console.log(complete_msg);
+        }
+        return result;
+    } catch (error_1) {
+        console.error('Error executing the command:', error_1);
+        throw error_1;
+    }
 }
 
 function getIDFromDB(allDocuments) {

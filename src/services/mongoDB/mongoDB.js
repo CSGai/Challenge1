@@ -44,8 +44,7 @@ async function runDB() {
 async function closeClientConnection() {
     console.log("\nClosing connection...");
     await client.close();
-    mongoAssist.execCommand(stopDatabase, 'Finished.\n');
-    process.exit(0);
+    await mongoAssist.execCommand(stopDatabase, 'Finished.\n');
 }
 //removes a user from the database
 async function removeUsers(user_id_list) {
@@ -271,6 +270,7 @@ async function testDB() {
     finally {
         rl.close();
         await closeClientConnection();
+        process.exit(0);
     }
 }
 

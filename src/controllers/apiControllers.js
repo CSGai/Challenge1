@@ -60,14 +60,14 @@ const userList = (req, res) => {
             res.status(500).send('Internal Server Error');
         });
 }
-const GameList = (req, res) => {
+const gameList = (req, res) => {
     mongo.getGamesFromCatalog()
-    .then(game_list => {
-        res.send(game_list);
-    })
-    .catch(error => {
-        console.error('Get Game List Error:', error);
-        res.status(500).send('Internal Server Error');
+        .then(game_list => {
+            res.send(game_list);
+        })
+        .catch(error => {
+            console.error('Get Game List Error:', error);
+            res.status(500).send('Internal Server Error');
     });
 }
 
@@ -88,7 +88,8 @@ const removeUserGames = (req, res) => {
     const data = req.body;
     let user_id = data['user_id'];
     let game_id_list = data['game_id_list'];
-    mongo.removeGamesFromUser(user_id, game_id_list)
+    mongo.removeGamesFromUser(user_id, game_id_list
+        )
         .then(msg => {
             res.send('Games Added To User Successfully');
         })
@@ -133,6 +134,6 @@ module.exports = {
     createUser,
     deleteProfiles,
     userProfile,
-    GameList,
+    gameList,
     userList
 }
