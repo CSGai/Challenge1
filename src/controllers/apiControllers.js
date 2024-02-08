@@ -10,7 +10,7 @@ const createUser = (req, res) => {
         .then(empty => {
             res.send("new user created");
         })
-        .catch (error => {
+        .catch(error => {
             console.error('Create New User Error:', error);
             res.status(500).send('Internal Server Error');
         });
@@ -23,8 +23,7 @@ const deleteProfiles = (req, res) => {
         .then(empty => {
             if (user_id_list.length > 1) {
                 res.send('users removed');
-            }
-            else {
+            } else {
                 res.send('user removed');
             }
         })
@@ -68,7 +67,7 @@ const gameList = (req, res) => {
         .catch(error => {
             console.error('Get Game List Error:', error);
             res.status(500).send('Internal Server Error');
-    });
+        });
 }
 
 const addUserGames = (req, res) => {
@@ -88,8 +87,7 @@ const removeUserGames = (req, res) => {
     const data = req.body;
     let user_id = data['user_id'];
     let game_id_list = data['game_id_list'];
-    mongo.removeGamesFromUser(user_id, game_id_list
-        )
+    mongo.removeGamesFromUser(user_id, game_id_list)
         .then(msg => {
             res.send('Games Added To User Successfully');
         })
@@ -117,14 +115,14 @@ const removeCatalogGames = (req, res) => {
     const data = req.body;
     let game_id_list = data['game_id_list'];
     mongo.removeGames(game_id_list)
-    .then(msg => {
-        res.send('Games Removed From Catalog Successfully');
-    })
-    .catch(error => {
-        console.error('Remove Games From Catalog Error:', error);
-        res.status(500).send('Internal Server Error');
-    });
-} 
+        .then(msg => {
+            res.send('Games Removed From Catalog Successfully');
+        })
+        .catch(error => {
+            console.error('Remove Games From Catalog Error:', error);
+            res.status(500).send('Internal Server Error');
+        });
+}
 
 module.exports = {
     addUserGames,

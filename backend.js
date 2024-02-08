@@ -21,13 +21,12 @@ backend.use('/api', api);
 backend.use('/', directories);
 
 
-backend.listen(port, (error) =>{
+backend.listen(port, (error) => {
     janitor();
-    if(!error && port != undefined){
+    if (!error && port != undefined) {
         console.log("Server is Up and Running on Port " + port);
         mongo.runDB();
-    }
-    else{
+    } else {
         console.log("Error occured during startup...", error);
     }
 });
