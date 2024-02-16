@@ -74,6 +74,7 @@ async function removeGames(game_id_list) {
             $in: game_id_list
         }
     });
+    console.log('removed ', game_id_list);
 }
 //adds a game (or a list of) to the user profile
 async function addGamesToUser(user_id, game_id_list) {
@@ -107,6 +108,13 @@ async function getUserList() {
     return await userInfo.find({}, {
         projection: {
             email_addr: 0,
+            _id: 0
+        }
+    }).toArray();
+}
+async function getGameList() {
+    return await gameInfo.find({}, {
+        projection: {
             _id: 0
         }
     }).toArray();
@@ -231,7 +239,7 @@ async function introduceGameToCatalog(game_name, game_score) {
     }
 }
 //retrieve gameIDs in a dict
-async function getGamesFromCatalog(game_names_list, return_game_names = false) {
+async function getGamesFromCatalog_ID(game_names_list, return_game_names = false) {
     var id_list = {};
     var allDocuments = {};
 
@@ -260,7 +268,6 @@ async function getGamesFromCatalog(game_names_list, return_game_names = false) {
         }
     } else {
         try {
-            console.log('\ngrabbing all games');
             allDocuments = await gameInfo.find({}, {
                 projection: {
                     game_id: 1,
@@ -342,10 +349,11 @@ module.exports = {
     removeUsers,
     addGamesToUser,
     removeGamesFromUser,
+    getGameList,
     getUserList,
     getProfile,
     createNewUser,
     introduceGameToCatalog,
-    getGamesFromCatalog,
+    getGamesFromCatalog_ID,
     removeGames
 }

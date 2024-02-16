@@ -15,7 +15,15 @@ backend.use((req, res, next) => {
     console.log(`[${new Date().toISOString()}] [${ip}] ${req.method} ${req.url}`);
     next();
 });
-
+backend.use((req, res, next) => {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
+    res.setHeader('Access-Control-Expose-Headers', 'X-Total-Count');
+    res.setHeader('Access-Control-Max-Age', '3600');
+    next();
+  });
 backend.use(express.json());
 backend.use('/api', api);
 backend.use('/', directories);

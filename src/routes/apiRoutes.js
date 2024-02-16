@@ -29,5 +29,6 @@ router.delete('/removeCatalogGames', controllers.removeCatalogGames);
 //GET methods
 router.get('/userList', controllers.userList);
 router.get('/gameList', controllers.gameList);
+router.get('/GameCatalog_IDs', controllers.GameCatalog_IDs)
 
 module.exports = router;

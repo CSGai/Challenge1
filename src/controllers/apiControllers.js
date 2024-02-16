@@ -8,11 +8,11 @@ const createUser = (req, res) => {
 
     mongo.createNewUser(username, email_addr, game_id_list)
         .then(empty => {
-            res.send("new user created");
+            res.send({response: "new user created"});
         })
         .catch(error => {
             console.error('Create New User Error:', error);
-            res.status(500).send('Internal Server Error');
+            res.status(500).send({response: 'Internal Server Error'});
         });
 }
 
@@ -22,16 +22,16 @@ const deleteProfiles = (req, res) => {
     mongo.removeUsers(user_id_list)
         .then(empty => {
             if (user_id_list.length > 1) {
-                res.send('users removed');
+                res.send({response: 'users removed'});
             } else {
-                res.send('user removed');
+                res.send({response: 'user removed'});
             }
         })
         .catch(error => {
             console.error('Remove Users Error:', error);
-            res.status(500).send('Internal Server Error');
+            res.status(500).send({response: 'Internal Server Error'});
         });
-    res.send("users removed");
+    res.send({response: "users removed"});
 }
 
 const userProfile = (req, res) => {
@@ -45,7 +45,7 @@ const userProfile = (req, res) => {
         })
         .catch(error => {
             console.error('Get User Profile Error:', error);
-            res.status(500).send('Internal Server Error');
+            res.status(500).send({response: 'Internal Server Error'});
         });
 }
 
@@ -56,17 +56,27 @@ const userList = (req, res) => {
         })
         .catch(error => {
             console.error('Get User List Error:', error);
-            res.status(500).send('Internal Server Error');
+            res.status(500).send({response: 'Internal Server Error'});
         });
 }
 const gameList = (req, res) => {
-    mongo.getGamesFromCatalog()
+    mongo.getGameList()
         .then(game_list => {
             res.send(game_list);
         })
         .catch(error => {
             console.error('Get Game List Error:', error);
-            res.status(500).send('Internal Server Error');
+            res.status(500).send({response: 'Internal Server Error'});
+        });
+}
+const GameCatalog_IDs = (req, res) => {
+    mongo.getGamesFromCatalog_ID()
+        .then(game_list => {
+            res.send(game_list);
+        })
+        .catch(error => {
+            console.error('Get Game List Error:', error);
+            res.status(500).send({response: 'Internal Server Error'});
         });
 }
 
@@ -76,11 +86,11 @@ const addUserGames = (req, res) => {
     let game_id_list = data['game_id_list'];
     mongo.addGamesToUser(user_id, game_id_list)
         .then(msg => {
-            res.send('Games Added To User Successfully');
+            res.send({response: 'Games Added To User Successfully'});
         })
         .catch(error => {
             console.error('Add User Games Error:', error);
-            res.status(500).send('Internal Server Error');
+            res.status(500).send({response: 'Internal Server Error'});
         });
 }
 const removeUserGames = (req, res) => {
@@ -89,11 +99,11 @@ const removeUserGames = (req, res) => {
     let game_id_list = data['game_id_list'];
     mongo.removeGamesFromUser(user_id, game_id_list)
         .then(msg => {
-            res.send('Games Added To User Successfully');
+            res.send({response: 'Games Added To User Successfully'});
         })
         .catch(error => {
             console.error('Remove User Games Error:', error);
-            res.status(500).send('Internal Server Error');
+            res.status(500).send({response: 'Internal Server Error'});
         });
 }
 
@@ -101,26 +111,33 @@ const addGameToCatalog = (req, res) => {
     const data = req.body;
     let game_name = data['game_name'];
     let game_score = data['game_score'];
+    if (!game_name || !game_score) {
+        res.status(500).send({response: 'missing fields'});
+    }
     mongo.introduceGameToCatalog(game_name, game_score)
         .then(msg => {
-            res.send('Games Added To Catalog Successfully');
+            res.send({response: 'Games Added To Catalog Successfully'});
         })
         .catch(error => {
             console.error('Add Games To Catalog Error:', error);
-            res.status(500).send('Internal Server Error');
+            res.status(500).send({response: 'Internal Server Error'});
         });
+
 }
 
 const removeCatalogGames = (req, res) => {
     const data = req.body;
     let game_id_list = data['game_id_list'];
+    if (!game_id_list) {
+        res.status(500).send({response: 'missing fields'});
+    }
     mongo.removeGames(game_id_list)
         .then(msg => {
-            res.send('Games Removed From Catalog Successfully');
+            res.send({response: 'Games Removed From Catalog Successfully'});
         })
         .catch(error => {
             console.error('Remove Games From Catalog Error:', error);
-            res.status(500).send('Internal Server Error');
+            res.status(500).send({response: 'Internal Server Error'});
         });
 }
 
@@ -133,5 +150,6 @@ module.exports = {
     deleteProfiles,
     userProfile,
     gameList,
-    userList
+    userList,
+    GameCatalog_IDs
 }
