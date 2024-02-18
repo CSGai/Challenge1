@@ -7,8 +7,8 @@ const createUser = (req, res) => {
     let game_id_list = data['game_id_list'];
 
     mongo.createNewUser(username, email_addr, game_id_list)
-        .then(empty => {
-            res.send({response: "new user created"});
+        .then(trown => {
+            res.send({response: trown});
         })
         .catch(error => {
             console.error('Create New User Error:', error);

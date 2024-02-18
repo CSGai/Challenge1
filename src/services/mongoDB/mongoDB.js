@@ -205,10 +205,14 @@ async function createNewUser(username, email_addr, game_id_list) {
                 await addGamesToUser(user_id, game_id_list);
                 console.log('games inserted to profile');
             } else {
-                console.log('Email already exists in the database:', email_addr);
+                const fail = `Email already exists in the database: ${email_addr}`;
+                console.log(fail);
+                return fail;
             }
         } else {
-            console.log('Username already exists in the database:', username);
+            const fail = `Username already exists in the database: ${username}`;
+            console.log(fail);
+            return fail;
         }
     } catch (error) {
         console.error('Error creating new user:', error);
