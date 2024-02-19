@@ -20,13 +20,6 @@ const deleteProfiles = (req, res) => {
     const data = req.body;
     let user_id_list = data['user_id'];
     mongo.removeUsers(user_id_list)
-        .then(empty => {
-            if (user_id_list.length > 1) {
-                res.send({response: 'users removed'});
-            } else {
-                res.send({response: 'user removed'});
-            }
-        })
         .catch(error => {
             console.error('Remove Users Error:', error);
             res.status(500).send({response: 'Internal Server Error'});

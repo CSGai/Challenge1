@@ -1,7 +1,11 @@
 require('dotenv/config');
 const mongoAssist = require('../../utils/mongoAssist');
-const { v4 } = require('uuid');
-const { MongoClient } = require("mongodb");
+const {
+    v4
+} = require('uuid');
+const {
+    MongoClient
+} = require("mongodb");
 const readline = require('readline');
 const util = require('util');
 
@@ -105,12 +109,23 @@ async function removeGamesFromUser(user_id, game_id_list) {
 }
 //get a list of all usernames and their respective IDs
 async function getUserList() {
-    return await userInfo.find({}, {
-        projection: {
-            email_addr: 0,
-            _id: 0
+    try {
+        const finalList = [];
+        const uil = await userInfo.find({}, {
+            projection: {
+                email_addr: 0,
+                _id: 0
+            }
+        }).toArray();
+    
+        for (const e of uil) {
+            const prof = await getProfile(user_id = e.user_id);
+            finalList.push(prof);
         }
-    }).toArray();
+        return finalList;
+    } catch (err) {
+        console.error('Failed to fetch user list');
+    }
 }
 async function getGameList() {
     return await gameInfo.find({}, {
@@ -172,7 +187,6 @@ async function getProfile(user_id = undefined, username = undefined) {
             totalScore: totalScore,
             games: gameNames
         };
-        console.log('userDoc: ', userDoc);
         return userDoc;
     } catch (error) {
         console.error('getProfile Error: ', error)
@@ -203,7 +217,7 @@ async function createNewUser(username, email_addr, game_id_list) {
 
                 //inserts new games to user relationships
                 await addGamesToUser(user_id, game_id_list);
-                console.log('games inserted to profile');
+                console.log(`User: ${username} succesfully created`);
             } else {
                 const fail = `Email already exists in the database: ${email_addr}`;
                 console.log(fail);
@@ -293,59 +307,59 @@ async function getGamesFromCatalog_ID(game_names_list, return_game_names = false
 async function autoCorrectProfiles() {}
 
 //runs tests for the db commands
-async function testDB() {
-    try {
+// async function testDB() {
+//     try {
 
-        await runDB();
-        console.log("\nbeginning test...\n");
+//         await runDB();
+//         console.log("\nbeginning test...\n");
 
-        var newProfileGames = [];
+//         var newProfileGames = [];
 
-        //introduce 2 games to the catalog
-        for (let i = 0; i < 2; i++) {
-            const gameName = await questionAsync('Game Name: ');
-            const gameScore = await questionAsync('Game Score: ');
-            newProfileGames.push(gameName);
-            await introduceGameToCatalog(gameName, gameScore);
-        }
-        const profileGames = getGamesFromCatalog(newProfileGames);
+//         //introduce 2 games to the catalog
+//         for (let i = 0; i < 2; i++) {
+//             const gameName = await questionAsync('Game Name: ');
+//             const gameScore = await questionAsync('Game Score: ');
+//             newProfileGames.push(gameName);
+//             await introduceGameToCatalog(gameName, gameScore);
+//         }
+//         const profileGames = getGamesFromCatalog(newProfileGames);
 
 
-        //get all games in the catalog (including the ones just added)
-        // const profileGames = getGamesFromCatalog(['destiny', 'destiny 2', 'deadcells', 'overwatch']);
-        await introduceGameToCatalog('warframe', 100)
-        const additionalProfileGames = getGamesFromCatalog('warframe');
+//         //get all games in the catalog (including the ones just added)
+//         // const profileGames = getGamesFromCatalog(['destiny', 'destiny 2', 'deadcells', 'overwatch']);
+//         await introduceGameToCatalog('warframe', 100)
+//         const additionalProfileGames = getGamesFromCatalog('warframe');
 
-        //create new user
-        var username = await questionAsync('\nusername: ');
-        var email_addr = await questionAsync('email: ');
-        // var username = 'TOG';
-        // var email_addr = 'TOG@admin.com';
+//         //create new user
+//         var username = await questionAsync('\nusername: ');
+//         var email_addr = await questionAsync('email: ');
+//         // var username = 'TOG';
+//         // var email_addr = 'TOG@admin.com';
 
-        await createNewUser(username, email_addr, await profileGames);
+//         await createNewUser(username, email_addr, await profileGames);
 
-        //success!
-        var profile = await getProfile(null, username);
-        await addGamesToUser(profile.user_id, await additionalProfileGames);
-        profile = await getProfile(null, username);
-        await removeGamesFromUser(profile.user_id, await additionalProfileGames);
-        profile = await getProfile(null, username);
+//         //success!
+//         var profile = await getProfile(null, username);
+//         await addGamesToUser(profile.user_id, await additionalProfileGames);
+//         profile = await getProfile(null, username);
+//         await removeGamesFromUser(profile.user_id, await additionalProfileGames);
+//         profile = await getProfile(null, username);
 
-        console.log(await getUserList());
-        await removeGames(await additionalProfileGames);
-        await removeUsers(profile.user_id);
-        console.log('users and profiles removed');
-        console.log(await getUserList());
-        console.log("\ntest has run its course...");
-    } catch (error) {
-        console.error('Error during test:', error);
-        await closeClientConnection();
-    } finally {
-        rl.close();
-        await closeClientConnection();
-        process.exit(0);
-    }
-}
+//         console.log(await getUserList());
+//         await removeGames(await additionalProfileGames);
+//         await removeUsers(profile.user_id);
+//         console.log('users and profiles removed');
+//         console.log(await getUserList());
+//         console.log("\ntest has run its course...");
+//     } catch (error) {
+//         console.error('Error during test:', error);
+//         await closeClientConnection();
+//     } finally {
+//         rl.close();
+//         await closeClientConnection();
+//         process.exit(0);
+//     }
+// }
 
 module.exports = {
     runDB,
