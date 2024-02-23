@@ -1,6 +1,6 @@
 const { backendSetup } = require('./src/utils/setup.js');
 const mongo = require('./src/services/mongoDB/mongoDB.js');
-require('dotenv/config.js');
+require('dotenv/config');
 
 setup = backendSetup();
 
